@@ -268,7 +268,7 @@ jobs:
           path: ${{matrix.workdir || github.workspace}}/bottles
 
       - name: Post cleanup
-        if: always()
+        if: always() && runner.os == 'macOS'
         run: |
           brew test-bot --only-cleanup-after
           rm -rvf bottles
