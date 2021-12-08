@@ -162,7 +162,7 @@ jobs:
           - runner: '10.15'
           - runner: ${{needs.setup_tests.outputs.linux-runner}}
             container: ${{fromJson(needs.setup_tests.outputs.container)}}
-            workdir: /github/home
+            workdir: ${{github.workspace}}
       fail-fast: ${{fromJson(needs.setup_tests.outputs.fail-fast)}}
     runs-on: ${{matrix.runner}}
     container: ${{matrix.container}}
@@ -268,7 +268,7 @@ jobs:
           path: ${{matrix.workdir || github.workspace}}/bottles
 
       - name: Post cleanup
-        if: always() && runner.os == 'macOS'
+        if: always()
         run: |
           brew test-bot --only-cleanup-after
           rm -rvf bottles
