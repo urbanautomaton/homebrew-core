@@ -202,15 +202,11 @@ jobs:
     env:
       GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
       HOMEBREW_GITHUB_API_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      GITHUB_ACTIONS_HOMEBREW_SELF_HOSTED: ${{ (matrix.runner != 'ubuntu-latest' && '1') }}
     steps:
       - name: Set environment variables
-        run: |
-          if [ "$RUNNER_OS" = 'macOS' ]; then
-            echo 'PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin' >> $GITHUB_ENV
-          fi
-          if [ "${{matrix.runner != 'ubuntu-latest'}}" = "true" ]; then
-            echo 'GITHUB_ACTIONS_HOMEBREW_SELF_HOSTED=1' >> $GITHUB_ENV
-          fi
+        if: runner.os == 'macOS-latest'
+        run: echo 'PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin' >> $GITHUB_ENV
 
       - name: Set up Homebrew
         id: set-up-homebrew
